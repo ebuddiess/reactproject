@@ -14,13 +14,13 @@ constraints = [
     ]
     
 
-router.get("/",authmid, async(req,res)=>{
+router.get("/",authmid , async(req,res)=>{
     try {
         const contact = await contactModel.find({user:req.user.id}).sort({date:-1})
         res.json(contact)
     } catch (error) {
         console.log(error.message)
-        res.status(500).send("server error")
+        res.status(500).json({ msg : "server error"})
     }
 })
 
@@ -35,6 +35,7 @@ router.post("/",authmid,constraints,async (req,res)=>{
     const { name , email , phone , type  } = req.body
 
     try {
+
         const newContact = new contactModel({
             name,email,phone,type,user:req.user.id
         })
@@ -45,17 +46,35 @@ router.post("/",authmid,constraints,async (req,res)=>{
 
     } catch ({error}) {
         console.log(error.message)
-        res.status(500).send("server error")
+        res.status(500).json("server error")
     }
 })
 
 
-router.put("/:id",(req,res)=>{
-    res.send("update contact base on id of contacts")
+router.put("/:id",authmid , async(req,res)=>{
+
+    const id = req.params.id 
+
+    res.send(req.body)
+
+    try {
+        const contact = await contactModel.findByIdAndUpdate({_id:id} , req.body)
+        res.json(contact)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ msg : "server error"})
+    }
 })
 
-router.delete("/:id",(req,res)=>{
-    res.send("delete")
+router.delete("/:id",authmid , async(req,res)=>{
+    const id = req.params.id 
+     try {
+        const contact = await contactModel.findByIdAndDelete({_id:id})
+        res.json(contact)
+    } catch (error) {
+        console.log(error.message)
+        res.status(500).json({ msg : "server error"})
+    }
 })
 
 

@@ -1,24 +1,62 @@
-import logo from './logo.svg';
-import './App.css';
+import Nav from './components/layouts/Nav.jsx';
 
-function App() {
+import PrivateRoute from './components/routing/PrivateRoute';
+
+
+import setAuthToken from './utils/setAuthToken';
+
+
+import Alert from './components/Alert';
+
+
+import AlertState from './context/alert/alertState';
+
+
+import Login from './components/auth/Login';
+
+
+import Register from './components/auth/Register';
+
+
+import AuthState from './context/auth/authState';
+
+
+import ContactStates from './context/contacts/contactStates';
+
+
+import About from './components/layouts/pages/About';
+
+import Home from './components/layouts/pages/Home';
+
+import './App.css';
+import { BrowserRouter as Router , Route, Switch }from 'react-router-dom'
+
+
+if(localStorage.token){
+  setAuthToken(localStorage.token)
+}
+
+
+const  App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AuthState>
+    <ContactStates>
+    <AlertState>
+    <Router>
+        <Nav/>
+        <div className="container">
+         <Alert/>
+          <Switch>
+           <Route exact path ="/login" component={Login} />
+           <Route exact path ="/register" component={Register} />
+            <PrivateRoute exact path ="/" component={Home} />
+            <Route exact path ="/about" component={About} />
+          </Switch>
+        </div> 
+   </Router>
+   </AlertState>
+   </ContactStates>
+   </AuthState>
   );
 }
 

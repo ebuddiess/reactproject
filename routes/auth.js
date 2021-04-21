@@ -18,7 +18,6 @@ constraints = [
     
 router.get("/",authmid,async (req,res)=>{
     try {
-        console.log(req.user.id + "from line 21 authroute")
         const user = await UserModel.findById(req.user.id).select("-password")
         res.send(user)
     } catch (error) {
@@ -39,7 +38,7 @@ router.post("/",constraints,async (req,res)=>{
 
     try {
         let user = await UserModel.findOne({email})
-        if(!user){
+        if(!user) {
             res.status(400).json({msg:"User doesnt exist"})
         }
 

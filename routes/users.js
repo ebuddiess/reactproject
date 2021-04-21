@@ -34,6 +34,7 @@ router.post("/",constraints, async (req,res)=>{
         let user = await UserModel.findOne({email})
 
         if(user){
+            
             res.status(400).json({msg :"User already exist"})
         }
 
